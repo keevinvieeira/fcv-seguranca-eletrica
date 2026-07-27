@@ -1,0 +1,14 @@
+{
+  "name": "fcv-seguranca-eletrica",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npx vite",
+    "build": "npx vite build && node build.js",
+    "preview": "npx vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,5 @@
+# .assetsignore
+.git/
+node_modules/
+.env*
+*.log
