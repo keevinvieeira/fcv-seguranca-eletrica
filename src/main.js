@@ -1,10 +1,11 @@
-// FCV Segurança Elétrica - Main Client Application Logic (Hardened Security Edition)
+// E-Prognos Engenharia & Laudos - Main Client Application Logic (Hardened Security Edition)
+
+const WHATSAPP_NUMBER = '5541999094170';
 
 document.addEventListener('DOMContentLoaded', () => {
   initShader();
   initHeaderScroll();
-  initModals();
-  initFormHandler();
+  initWhatsAppModal();
   initSmoothScroll();
 });
 
@@ -66,14 +67,13 @@ function initShader() {
       vec2 uv = v_texCoord;
       float t = u_time * 0.4;
 
-      vec3 col1 = vec3(0.07, 0.07, 0.09); // Deep dark surface
-      vec3 col2 = vec3(1.0, 0.37, 0.12);  // Electric Orange accent
-      vec3 col3 = vec3(0.0, 0.89, 0.99);  // Cyan Arc Flash accent
+      vec3 col1 = vec3(0.07, 0.07, 0.09);
+      vec3 col2 = vec3(1.0, 0.37, 0.12);
+      vec3 col3 = vec3(0.0, 0.89, 0.99);
 
       float n = network(uv, t);
       vec3 color = mix(col1, col2 * 0.5, n * 0.6);
 
-      // Subtle mouse interaction grid pulse
       vec2 m = u_mouse / u_resolution;
       float mDist = distance(uv, m);
       float mGlow = smoothstep(0.4, 0.0, mDist) * 0.15;
@@ -149,84 +149,61 @@ function initHeaderScroll() {
   });
 }
 
-// 3. Modal Controllers
-function initModals() {
-  const quoteModal = document.getElementById('quote-modal');
-  const portfolioModal = document.getElementById('portfolio-modal');
+// 3. WhatsApp topic picker (no name/phone form)
+function initWhatsAppModal() {
+  const modal = document.getElementById('whatsapp-modal');
+  if (!modal) return;
 
-  const openQuoteBtns = document.querySelectorAll('[data-open-quote]');
-  const openPortfolioBtns = document.querySelectorAll('[data-open-portfolio]');
+  const openBtns = document.querySelectorAll('[data-open-whatsapp]');
   const closeBtns = document.querySelectorAll('[data-close-modal]');
+  const options = document.querySelectorAll('[data-wa-topic]');
 
-  openQuoteBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      quoteModal?.classList.add('active');
-    });
+  function openModal() {
+    modal.classList.add('active');
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+  }
+
+  function openWhatsApp(topic) {
+    const safeTopic = String(topic || 'Atendimento').slice(0, 120);
+    const message = `Olá! Gostaria de falar com o especialista da E-Prognus sobre: ${safeTopic}.`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    closeModal();
+  }
+
+  openBtns.forEach((btn) => {
+    btn.addEventListener('click', openModal);
   });
 
-  openPortfolioBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      portfolioModal?.classList.add('active');
-    });
+  closeBtns.forEach((btn) => {
+    btn.addEventListener('click', closeModal);
   });
 
-  closeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      quoteModal?.classList.remove('active');
-      portfolioModal?.classList.remove('active');
-    });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
   });
 
-  [quoteModal, portfolioModal].forEach(modal => {
-    modal?.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-  });
-}
-
-// 4. Contact & Quote Form Handling (Hardened against Injection)
-function initFormHandler() {
-  const form = document.getElementById('quote-form');
-  const feedbackEl = document.getElementById('form-feedback');
-  if (!form || !feedbackEl) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const nameInput = document.getElementById('client-name');
-    const phoneInput = document.getElementById('client-phone');
-    const serviceInput = document.getElementById('client-service');
-
-    const name = nameInput ? nameInput.value.trim() : '';
-    const phone = phoneInput ? phoneInput.value.trim() : '';
-    const service = serviceInput ? serviceInput.value : '';
-
-    if (!name || !phone) {
-      feedbackEl.textContent = 'Por favor, preencha o nome e telefone para contato.';
-      feedbackEl.className = 'font-code text-sm text-red-400 mt-3';
-      return;
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
     }
+  });
 
-    // Safe rendering via textContent
-    feedbackEl.textContent = `Obrigado, ${name}! Solicitação enviada com sucesso. Nossa equipe de engenharia entrará em contato via WhatsApp/Telefone (${phone}).`;
-    feedbackEl.className = 'font-code text-sm text-emerald-400 mt-3 p-3 bg-emerald-950/40 border border-emerald-500/30 rounded';
-
-    form.reset();
-
-    setTimeout(() => {
-      const modal = document.getElementById('quote-modal');
-      modal?.classList.remove('active');
-      feedbackEl.textContent = '';
-    }, 4000);
+  options.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const topic = btn.getAttribute('data-wa-topic');
+      openWhatsApp(topic);
+    });
   });
 }
 
-// 5. Smooth Scroll Navigation
+// 4. Smooth Scroll Navigation
 function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
       if (href && href !== '#') {
         e.preventDefault();

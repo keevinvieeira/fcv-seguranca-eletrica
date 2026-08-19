@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="E-Prognos">
+  <!-- Shield outline: site secondary cyan -->
+  <path
+    d="M32 6
+       C32 6 14 12.5 14 12.5
+       V28.5
+       C14 42.8 22.4 53.8 32 58
+       C41.6 53.8 50 42.8 50 28.5
+       V12.5
+       C50 12.5 32 6 32 6Z"
+    fill="rgba(0,227,253,0.14)"
+    stroke="#00e3fd"
+    stroke-width="2.75"
+    stroke-linejoin="round"
+  />
+  <!-- Lightning bolt: site primary orange -->
+  <path
+    d="M34.8 18
+       L25.2 33.2
+       H32.4
+       L29.2 46
+       L38.8 30.8
+       H31.6
+       L34.8 18Z"
+    fill="#ff5f1f"
+  />
+</svg>

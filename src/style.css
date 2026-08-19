@@ -158,3 +158,22 @@ body {
 .modal-backdrop.active .modal-content {
   transform: scale(1);
 }
+
+/* Logo mark: cyan shield + orange bolt */
+.logo-mark {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: block;
+  flex-shrink: 0;
+  transition: filter 0.25s ease, transform 0.25s ease;
+}
+
+.logo-mark--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+a.group:hover .logo-mark {
+  filter: drop-shadow(0 0 8px rgba(0, 227, 253, 0.55));
+  transform: scale(1.05);
+}
