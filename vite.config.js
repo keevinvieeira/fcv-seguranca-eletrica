@@ -8,6 +8,8 @@ export default {
         '**/Marketing Kit/**',
         '**/stitch_pomelli_dynamic_redesign/**',
         '**/.git/**',
+        '**/.wrangler/**',
+        '**/dist/**',
         '**/node_modules/**'
       ]
     }
